@@ -1,0 +1,11 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+	<div class="col-xs-12 col-sm-6 col-md-4">
+		{% embed 'kategoriVelger.html.twig' %}{% endembed %}
+	</div>
+
+	{% if cat is defined %}
+		{% embed 'kategoriListe.html.twig' %}{% endembed %}
+	{% endif %}
+{% endblock %}
