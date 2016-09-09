@@ -3,9 +3,15 @@
 {% block content %}
 	<div class="col-xs-12 col-sm-6 col-md-4">
 		{% embed 'kategoriVelger.html.twig' %}{% endembed %}
+		{% if selected_cat is defined %}
+			{% embed 'nyttDokument.html.twig' %}{% endembed %}
+		{% endif %}
 	</div>
 
-	{% if cat is defined %}
-		{% embed 'kategoriListe.html.twig' %}{% endembed %}
+	{% if selected_cat is defined %}
+		<div class="col-xs-12 col-sm-6 col-md-8">
+			{% embed 'kategoriListe.html.twig' %}{% endembed %}
+		</div>
+		<div class="clearfix"></div>
 	{% endif %}
 {% endblock %}

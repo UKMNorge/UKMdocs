@@ -1,0 +1,9 @@
+<table class="table">
+	{% for doc in docs %}
+		<tr>
+			<td>		
+				<a href="{{ doc.link }}">{{ doc.name }}</a>
+			</td>
+		</tr>
+	{% endfor %}
+</table>

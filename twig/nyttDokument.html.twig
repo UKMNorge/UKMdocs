@@ -1,0 +1,49 @@
+
+<h4>Nytt dokument i {{ selected_cat.name }}</h4>
+<form class="" method="POST">
+	<div class="form-group">
+		<label for="doc_name">Dokument-navn</label>
+		<input type="text" class="form-control" name="doc_name" id="doc_name" placeholder="Styreprotokoll september 2016, Prosjektplan, ..." required="required">
+	</div>
+	<input type="hidden" class="form-control" name="upload_id" id="upload_id">
+	<div class="form-group">
+		<div class="input-group">
+			<input type="text" class="form-control" name="file_name" id="file_name" disabled="disabled">
+			<span class="input-group-btn">
+				<button id="lastOpp" class="btn btn-default">Velg fil</button>
+			</span>
+		</div>
+	</div>
+	<div class="form-group">
+		<button type="submit" class="form-control btn btn-success">Lagre dokument</button>
+	</div>
+
+</form>
+
+<script>
+var media_uploader = null;
+
+jQuery("#lastOpp").click(function(knapp) {
+	knapp.preventDefault();
+	open_media_uploader();
+});
+
+function open_media_uploader()
+{
+    media_uploader = wp.media({
+        frame:    "post", 
+        state:    "insert", 
+        multiple: false
+    });
+
+    media_uploader.on("insert", function(){
+        var json = media_uploader.state().get("selection").first().toJSON();
+
+        console.log(json);
+        jQuery("#upload_id").val(json.id);
+        jQuery("#file_name").val(json.filename);
+    });
+
+    media_uploader.open();
+}
+</script>

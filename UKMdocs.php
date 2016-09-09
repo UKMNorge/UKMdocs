@@ -8,10 +8,12 @@ Version: 0.1
 Author URI: http://www.github.com/AsgeirSH/
 */
 
+## Shortcode setup:
+add_shortcode('ukmdocs', 'UKMdocs_shortcode_parser');
+
 if(is_admin()) {
 	add_action('admin_menu', 'UKMdok_menu');
 }
-
 
 function UKMdok_menu() {
 	$page = add_menu_page('Dokumenter', 'Dokumenter', 'superadmin', 'UKMdocs', 'UKMdocs', 'http://ico.ukm.no/chart-32.png', 155);
@@ -31,4 +33,18 @@ function UKMdokumenter_scripts_and_styles() {
 	wp_enqueue_style('UKMwp_dashboard_css');
 	wp_enqueue_script('WPbootstrap3_js');
 	wp_enqueue_style('WPbootstrap3_css');
+	wp_enqueue_media();
+}
+
+# Selve entry-point til parseren.
+# Denne kalles når Wordpress har funnet shortcoden vår i teksten.
+# Kan returnere HTML.
+function UKMdocs_shortcode_parser($attributes) {
+	$attributes = shortcode_atts( array(
+		'cat' => null,
+		'doc' => null
+		), $attributes, 'ukmdocs' );
+
+	require_once('shortcodes.php');
+	return parse($attributes);
 }

@@ -1,6 +1,8 @@
 <form class="">
 	<div class="form-group">
-		<select class="form-control" onChange="checkSelected(this)">
+		<input type="hidden" name="currentCat" id="currentCat" value="{{ selected_cat.id }}">
+		<select class="form-control" id="valgtKategori" name="valgtKategori" onChange="checkSelected(this)">
+			<option value="" {{ ( not selected_cat is defined ) or ( selected_cat.id|length == 0 ) ? 'selected' : ''}} disabled="disabled">Velg kategori</option>
 			{% for category in categories %}
 				<option value="{{ category.id }}" {{ category.id == selected_cat.id ? 'selected' : ''}}>{{ category.name }}</option>
 				{% if loop.last %} 
@@ -10,26 +12,32 @@
 				<option value="new" disabled="disabled" selected="selected">Ny kategori:</option>
 			{% endfor %}
 		</select>
-	<div>
+	</div>
 </form>
-{# Vises kun ved ingen kategorier eller valget "eller ny:" er valgt. #}
+{# Vises kun ved ingen kategorier eller når valget "eller ny:" er valgt. #}
 <div id="nyKategori" class="" style="{{ categories is empty ? '' : 'display: none;' }} ">
 	<h4>Navn</h4>
 	{# TODO: Finn ut hvorfor denne ikke er fullbredde #}
-	<form class="form-inline">
+	<form class="form-inline" method="POST">
 		<div class="form-group">
-			<input type="text" name="name" id="name" class="form-control">
+			<input type="text" name="cat_name" id="cat_name" class="form-control">
 		</div>
 		<button type="submit" class="btn btn-success">Legg til</button>
 	</form>
 </div>
-
+<p>&nbsp;</p>
 <script>
 // TODO: Redirect til ?cat=element.value ved klikk.
-function checkSelected(element) {
+function checkSelected(element) {
 	if(element.value == 'new') {
 		jQuery("#nyKategori").slideDown();
 	}
-	else jQuery("#nyKategori").slideUp();
+	else if (element.value == jQuery("#currentCat").val()) {
+		jQuery("#nyKategori").slideUp();
+	}
+	else {
+		var val = jQuery("#valgtKategori").val();
+		window.location = "?page=UKMdocs&cat="+val;
+	}
 }
 </script>

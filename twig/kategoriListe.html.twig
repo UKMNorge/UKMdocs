@@ -1,0 +1,29 @@
+<div class="well">
+	<h4>Dokumenter i {{ selected_cat.name }}</h4>
+	<p>Trykk på navnet for å laste ned dokumentet.</p>
+	<p>For å legge inn en liste over alle dokumenter i denne kategorien i en artikkel, bruk følgende kode:</p>
+	<pre><code>{{ selected_cat.shortcode }}</code></pre>
+
+	<p>For å legge inn en lenke til dokumentet i artikler og sider, lim inn teksten fra feltet "Shortcode" under.</p>
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th>Navn</th>
+				<th>Shortcode</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for doc in selected_cat.docs %}
+				<tr>
+					<td>		
+						<a href="{{ doc.link }}">{{ doc.name }}</a>
+					</td>
+					<td>
+						<code>{{ doc.shortcode }}</code>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
