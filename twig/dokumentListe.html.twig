@@ -1,9 +1,5 @@
-<table class="table">
-	{% for doc in docs %}
-		<tr>
-			<td>		
-				<a href="{{ doc.link }}">{{ doc.name }}</a>
-			</td>
-		</tr>
+<p>
+	{% for doc in docs %}		
+		<a href="{{ doc.link }}">{{ doc.name }}</a><br />
 	{% endfor %}
-</table>
+</p>
