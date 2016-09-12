@@ -2,14 +2,12 @@
 
 class UKMdokumenter {
 	
-	// TODO: Implement
 	public function getCategoryName($cat_id) {
 		$sql = new SQL("SELECT * FROM ukm_docs_categories WHERE id = '#id'", array('id' => $cat_id));
 		return $sql->run('field', 'name');
 		#return 'Testnavn';
 	}
 
-	// TODO: Implement
 	# Skal returnere et array med dokumenter.
 	public function getAllDocsFromCategory($cat_id) {
 		$sql = new SQL("SELECT * FROM ukm_docs WHERE category_id = '#cat_id'", array('cat_id' => $cat_id));
@@ -28,7 +26,6 @@ class UKMdokumenter {
 		return $docs;
 	}
 
-	// TODO: Implement
 	public function getAllCategories() {
 		$sql = new SQL("SELECT * FROM ukm_docs_categories");
 		$res = $sql->run();
@@ -72,7 +69,6 @@ class UKMdokumenter {
 		return $doc;
 	}
 
-	// TODO: Implementer
 	// SQL-strukturen er som følger:
 	// Tabell: ukm_docs_categories
 	// id INT
@@ -98,7 +94,6 @@ class UKMdokumenter {
 		return $message;
 	}
 
-	// TODO: Implementer
 	// Params: 
 	// 	Filnavn (Typ. "Styreprotokoll september 2016")
 	//	Upload-ID - Wordpress Media Uploader-ID
@@ -121,10 +116,10 @@ class UKMdokumenter {
 		$sql->add('url', wp_get_attachment_url($upload_id));
 	
 		$res = $sql->run();
-		if($res == 1) {
+		if($res == 1 || $sql->error == null) {
 			$message = new stdClass();
 			$message->level = 'success';
-			$message->header = 'La til dokumentet '.$name.'.';
+			$message->header = 'Lagret dokumentet '.$name.'.';
 		} else {
 			$message = new stdClass();
 			$message->level = 'danger';
@@ -132,5 +127,19 @@ class UKMdokumenter {
 		}
 
 		return $message;
+	}
+
+	public function deleteDocument($id) {
+		$qry = new SQLdel('ukm_docs', array('id' => $id));
+		#echo $qry->debug();
+		$res = $qry->run();
+		return $res;
+	}
+
+	public function deleteCategory($id) {
+		$qry = new SQLdel('ukm_docs_categories', array('id' => $id));
+		#echo $qry->debug();
+		$res = $qry->run();
+		return $res;
 	}
 }

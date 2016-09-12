@@ -6,7 +6,7 @@
 			{% for category in categories %}
 				<option value="{{ category.id }}" {{ category.id == selected_cat.id ? 'selected' : ''}}>{{ category.name }}</option>
 				{% if loop.last %} 
-					<option value="new">eller ny:</option>
+					<option value="new">eller ny kategori:</option>
 				{% endif %}
 			{% else %}
 				<option value="new" disabled="disabled" selected="selected">Ny kategori:</option>
@@ -17,7 +17,6 @@
 {# Vises kun ved ingen kategorier eller når valget "eller ny:" er valgt. #}
 <div id="nyKategori" class="" style="{{ categories is empty ? '' : 'display: none;' }} ">
 	<h4>Navn</h4>
-	{# TODO: Finn ut hvorfor denne ikke er fullbredde #}
 	<form class="form-inline" method="POST">
 		<div class="form-group">
 			<input type="text" name="cat_name" id="cat_name" class="form-control">
@@ -27,7 +26,6 @@
 </div>
 <p>&nbsp;</p>
 <script>
-// TODO: Redirect til ?cat=element.value ved klikk.
 function checkSelected(element) {
 	if(element.value == 'new') {
 		jQuery("#nyKategori").slideDown();

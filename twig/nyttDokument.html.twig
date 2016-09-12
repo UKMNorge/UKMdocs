@@ -1,14 +1,19 @@
 
-<h4>Nytt dokument i {{ selected_cat.name }}</h4>
-<form class="" method="POST">
+{% if selected_doc is defined %}
+	<h4>Endre dokument {{ selected_doc.id }} i {{ selected_cat.name }}</h4>
+{% else %}
+	<h4>Nytt dokument i {{ selected_cat.name }}</h4>
+{% endif %}
+<form class="" method="POST" action="?page=UKMdocs&cat={{ selected_cat.id }}">
 	<div class="form-group">
 		<label for="doc_name">Dokument-navn</label>
-		<input type="text" class="form-control" name="doc_name" id="doc_name" placeholder="Styreprotokoll september 2016, Prosjektplan, ..." required="required">
+		<input type="hidden" name="doc_id" id="doc_id" value="{{ selected_doc is defined ? selected_doc.id : '' }}">
+		<input type="text" class="form-control" name="doc_name" id="doc_name" placeholder="Styreprotokoll september 2016, Prosjektplan, ..." required="required" value="{{ selected_doc is defined ? selected_doc.name : ''}}">
 	</div>
-	<input type="hidden" class="form-control" name="upload_id" id="upload_id">
+	<input type="hidden" class="form-control" name="upload_id" id="upload_id" value="{{ selected_doc is defined ? selected_doc.upload_id : ''}}">
 	<div class="form-group">
 		<div class="input-group">
-			<input type="text" class="form-control" name="file_name" id="file_name" disabled="disabled">
+			<input type="text" class="form-control" name="file_name" id="file_name" disabled="disabled" value="{{ selected_doc.name }}">
 			<span class="input-group-btn">
 				<button id="lastOpp" class="btn btn-default">Velg fil</button>
 			</span>
@@ -17,6 +22,11 @@
 	<div class="form-group">
 		<button type="submit" class="form-control btn btn-success">Lagre dokument</button>
 	</div>
+	{% if selected_doc is defined %}
+		<div class="form-group text-center">
+			<a href="?page=UKMdocs&cat={{ selected_cat.id }}">avbryt</a>
+		</div>
+	{% endif %}
 
 </form>
 
