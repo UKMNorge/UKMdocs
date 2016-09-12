@@ -18,7 +18,7 @@ class UKMdokumenter {
 			$doc->id = $row['id'];
 			$doc->name = utf8_encode($row['name']);
 			$doc->upload_id = $row['upload_id'];
-			$doc->link = $row['url'];
+			$doc->link = utf8_encode($row['url']);
 			$doc->category_id = $row['category_id'];
 			$doc->shortcode = '[ukmdocs doc="'.$doc->id.'"]';
 			$docs[] = $doc;
@@ -62,7 +62,7 @@ class UKMdokumenter {
 		$doc->id = $res['id'];
 		$doc->name = utf8_encode($res['name']);
 		$doc->upload_id = $res['upload_id'];
-		$doc->link = $res['url'];
+		$doc->link = utf8_encode($res['url']); # Vi har URLer med Ø i...
 		$doc->category_id = $res['category_id'];
 		$doc->shortcode = '[ukmdocs doc="'.$doc->id.'"]';
 
