@@ -23,7 +23,7 @@ class UKMdokumenter {
 		else {
 			$sql = new SQL("SELECT * FROM ukm_docs WHERE category_id = '#cat_id'", array('cat_id' => $cat_id));
 		}
-		
+
 		$res = $sql->run();
 		$docs = array();
 		while ($row = mysql_fetch_assoc($res)) {
@@ -63,6 +63,7 @@ class UKMdokumenter {
 		$cat->name = $this->getCategoryName($cat->id);
 		$cat->docs = $this->getAllDocsFromCategory($cat->id);
 		$cat->shortcode = '[ukmdocs cat="'.$cat->id.'"]';
+		$cat->shortcode_newest = '[ukmdocs cat="'.$cat->id.'" sort="newest"]';
 
 		return $cat;
 	}
