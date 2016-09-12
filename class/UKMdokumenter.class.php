@@ -9,8 +9,21 @@ class UKMdokumenter {
 	}
 
 	# Skal returnere et array med dokumenter.
-	public function getAllDocsFromCategory($cat_id) {
-		$sql = new SQL("SELECT * FROM ukm_docs WHERE category_id = '#cat_id'", array('cat_id' => $cat_id));
+	public function getAllDocsFromCategory($cat_id, $sort = null) {
+		if($sort == 'newest') {
+			$sql = new SQL("SELECT * FROM ukm_docs 
+							WHERE category_id = '#cat_id'
+							ORDER BY `created` DESC", array('cat_id' => $cat_id));
+		}
+		elseif($sort == 'oldest') {
+			$sql = new SQL("SELECT * FROM ukm_docs 
+							WHERE category_id = '#cat_id'
+							ORDER BY `created` ASC", array('cat_id' => $cat_id));	
+		}
+		else {
+			$sql = new SQL("SELECT * FROM ukm_docs WHERE category_id = '#cat_id'", array('cat_id' => $cat_id));
+		}
+		
 		$res = $sql->run();
 		$docs = array();
 		while ($row = mysql_fetch_assoc($res)) {

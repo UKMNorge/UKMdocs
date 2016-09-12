@@ -44,7 +44,8 @@ function UKMdokumenter_scripts_and_styles() {
 function UKMdocs_shortcode_parser($attributes) {
 	$attributes = shortcode_atts( array(
 		'cat' => null,
-		'doc' => null
+		'doc' => null,
+		'sort' => null
 		), $attributes, 'ukmdocs' );
 
 	require_once('shortcodes.php');

@@ -3,20 +3,20 @@
 function parse($attr) {
 	// List ut alle dokument i kategori
 	if($attr['cat'] != null && $attr['doc'] == null) {
-		return buildCategory($attr['cat']);
+		return buildCategory($attr['cat'], $attr['sort']);
 	}
 	// Lenke til ett dokument
 	elseif ($attr['doc'] != null) {
-		return getDoc($attr['doc']);
+		return getDoc($attr['doc'], $attr['sort']);
 	} 
 	else return '[ukmdocs]';
 }
 
 # Returns HTML
-function buildCategory($cat_id) {
+function buildCategory($cat_id, $sort) {
 	require_once(__DIR__.'/class/UKMdokumenter.class.php');
 	$docs = new UKMdokumenter();
-	$TWIGdata['docs'] = $docs->getAllDocsFromCategory($cat_id);
+	$TWIGdata['docs'] = $docs->getAllDocsFromCategory($cat_id, $sort);
 
 	if(count($TWIGdata['docs']) > 1) 
 		return TWIG('dokumentListe.html.twig', $TWIGdata, dirname(__FILE__), true);
