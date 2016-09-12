@@ -16,7 +16,7 @@ class UKMdokumenter {
 		while ($row = mysql_fetch_assoc($res)) {
 			$doc = new stdClass();
 			$doc->id = $row['id'];
-			$doc->name = $row['name'];
+			$doc->name = utf8_encode($row['name']);
 			$doc->upload_id = $row['upload_id'];
 			$doc->link = $row['url'];
 			$doc->category_id = $row['category_id'];
@@ -60,7 +60,7 @@ class UKMdokumenter {
 
 		$doc = new stdClass();
 		$doc->id = $res['id'];
-		$doc->name = $res['name'];
+		$doc->name = utf8_encode($res['name']);
 		$doc->upload_id = $res['upload_id'];
 		$doc->link = $res['url'];
 		$doc->category_id = $res['category_id'];
