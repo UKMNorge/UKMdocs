@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors',true);
+error_reporting(E_NONE);
+ini_set('display_errors',false);
 
 require_once( __DIR__ . '/../class/UKMdokumenter.class.php');
 $docs = new UKMdokumenter();
