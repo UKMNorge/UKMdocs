@@ -13,14 +13,14 @@ add_shortcode('ukmdocs', 'UKMdocs_shortcode_parser');
 
 
 #var_dump($blog);
-if (is_admin() && get_current_blog_id() == (UKM_HOSTNAME == 'ukm.dev' ? 13 : 881) )  {
-	add_action('admin_menu', 'UKMdok_menu');
+if (is_admin() ) {// && get_current_blog_id() == (UKM_HOSTNAME == 'ukm.dev' ? 13 : 881) )  {
+	add_action('UKM_admin_menu', 'UKMdok_menu');
 }
 
 function UKMdok_menu() {
-	$page = add_menu_page('Dokumenter', 'Dokumenter', 'superadmin', 'UKMdocs', 'UKMdocs', 'http://ico.ukm.no/chart-16.png', 155);
+	UKM_add_menu_page('content', 'Dokumenter', 'Dokumenter', 'superadmin', 'UKMdocs', 'UKMdocs', 'http://ico.ukm.no/chart-16.png', 5);
 
-	add_action( 'admin_print_styles-' . $page, 'UKMdokumenter_scripts_and_styles' );
+	UKM_add_scripts_and_styles('UKMdocs', 'UKMdokumenter_scripts_and_styles' );
 }
 
 function UKMdocs() {
