@@ -1,5 +1,7 @@
 <?php
 
+require_once('UKM/sql.class.php');
+
 class UKMdokumenter {
 	
 	public function getCategoryName($cat_id) {
@@ -27,14 +29,7 @@ class UKMdokumenter {
 		$res = $sql->run();
 		$docs = array();
 		while ($row = mysql_fetch_assoc($res)) {
-			$doc = new stdClass();
-			$doc->id = $row['id'];
-			$doc->name = utf8_encode($row['name']);
-			$doc->upload_id = $row['upload_id'];
-			$doc->link = utf8_encode($row['url']);
-			$doc->category_id = $row['category_id'];
-			$doc->shortcode = '[ukmdocs doc="'.$doc->id.'"]';
-			$docs[] = $doc;
+			$docs[] = $this->getDocumentData( $row );
 		}
 		return $docs;
 	}
@@ -68,17 +63,41 @@ class UKMdokumenter {
 		return $cat;
 	}
 
-	public function getDocument($doc_id) {
-		$sql = new SQL("SELECT * FROM ukm_docs WHERE id = '#doc_id'", array("doc_id" => $doc_id));
+	public function getDocumentByPublicId( $public_id ) {
+		$sql = new SQL(
+				"SELECT * ".
+				"FROM `ukm_docs` ".
+				"WHERE `public_id` = '#doc_id'",
+			array("doc_id" => $public_id)
+		);
 		$res = $sql->run('array');
+		
+		return $this->getDocumentData( $res );
+	}
 
+	public function getDocument($doc_id) {
+		$sql = new SQL(
+				"SELECT * ".
+				"FROM `ukm_docs` ".
+				"WHERE `id` = '#doc_id'",
+			array("doc_id" => $doc_id)
+		);
+		$res = $sql->run('array');
+		
+		return $this->getDocumentData( $res );
+	}
+	
+	public function getDocumentData( $res ) {
 		$doc = new stdClass();
 		$doc->id = $res['id'];
 		$doc->name = utf8_encode($res['name']);
 		$doc->upload_id = $res['upload_id'];
-		$doc->link = utf8_encode($res['url']); # Vi har URLer med Ø i...
+#		$doc->link = utf8_encode($res['url']); # Vi har URLer med Ø i...
+		$doc->file = utf8_encode($res['url']); # Vi har URLer med Ø i...
+		$doc->link = '//dokument.'. UKM_HOSTNAME .'/'.$res['public_id'].'/';
 		$doc->category_id = $res['category_id'];
 		$doc->shortcode = '[ukmdocs doc="'.$doc->id.'"]';
+		$doc->public_id = $res['public_id'];
 
 		return $doc;
 	}
@@ -120,10 +139,12 @@ class UKMdokumenter {
 	// upload_id int NOT NULL
 	// category_id int NOT NULL
 	public function addDocument($id = null, $name, $upload_id, $category_id) {
-		if($id != null) 
+		if($id != null) {
 			$sql = new SQLins('ukm_docs', array('id' => $id));
-		else 
+		} else {
 			$sql = new SQLins('ukm_docs');
+			$sql->add('public_id', substr(md5(uniqid(mt_rand(), true)), 0, 8) );
+		}
 		$sql->add('name', $name);
 		$sql->add('upload_id', $upload_id);
 		$sql->add('category_id', $category_id);
