@@ -35,7 +35,7 @@ class UKMdokumenter {
 	}
 
 	public function getAllCategories() {
-		$sql = new SQL("SELECT * FROM ukm_docs_categories");
+		$sql = new SQL("SELECT * FROM `ukm_docs_categories` ORDER BY `name` ASC");
 		$res = $sql->run();
 		
 		$cats = array();
@@ -43,7 +43,7 @@ class UKMdokumenter {
 		while($row = mysql_fetch_assoc($res)) {
 			$cat = new stdClass();
 			$cat->id = $row['id'];
-			$cat->name = $row['name'];
+			$cat->name = utf8_encode($row['name']);
 			$cat->shortcode = '[ukmdocs cat="'.$cat->id.'"]';
 			$cats[] = $cat;
 		}
