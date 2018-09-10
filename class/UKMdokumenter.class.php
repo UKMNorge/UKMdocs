@@ -28,7 +28,7 @@ class UKMdokumenter {
 
 		$res = $sql->run();
 		$docs = array();
-		while ($row = mysql_fetch_assoc($res)) {
+		while ($row = SQL::fetch($res)) {
 			$docs[] = $this->getDocumentData( $row );
 		}
 		return $docs;
@@ -40,7 +40,7 @@ class UKMdokumenter {
 		
 		$cats = array();
 
-		while($row = mysql_fetch_assoc($res)) {
+		while($row = SQL::fetch($res)) {
 			$cat = new stdClass();
 			$cat->id = $row['id'];
 			$cat->name = utf8_encode($row['name']);
