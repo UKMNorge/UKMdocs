@@ -43,7 +43,7 @@ class UKMdokumenter {
 		while($row = SQL::fetch($res)) {
 			$cat = new stdClass();
 			$cat->id = $row['id'];
-			$cat->name = utf8_encode($row['name']);
+			$cat->name = $row['name'];
 			$cat->shortcode = '[ukmdocs cat="'.$cat->id.'"]';
 			$cats[] = $cat;
 		}
@@ -90,10 +90,9 @@ class UKMdokumenter {
 	public function getDocumentData( $res ) {
 		$doc = new stdClass();
 		$doc->id = $res['id'];
-		$doc->name = utf8_encode($res['name']);
+		$doc->name = $res['name'];
 		$doc->upload_id = $res['upload_id'];
-#		$doc->link = utf8_encode($res['url']); # Vi har URLer med Ø i...
-		$doc->file = str_replace('http:','https:', utf8_encode($res['url'])); # Vi har URLer med Ø i...
+		$doc->file = str_replace('http:','https:', $res['url']); # Vi har URLer med Ø i...
 		$doc->link = '//dokument.'. UKM_HOSTNAME .'/'.$res['public_id'].'/';
 		$doc->category_id = $res['category_id'];
 		$doc->shortcode = '[ukmdocs doc="'.$doc->id.'"]';
