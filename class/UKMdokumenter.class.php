@@ -1,46 +1,51 @@
 <?php
 
-require_once('UKM/sql.class.php');
+use UKMNorge\Database\SQL\Query;
+use UKMNorge\Database\SQL\Insert;
+use UKMNorge\Database\SQL\Update;
+use UKMNorge\Database\SQL\Delete;
+
+require_once('UKM/Autoloader.php');
 
 class UKMdokumenter {
 	
 	public function getCategoryName($cat_id) {
-		$sql = new SQL("SELECT * FROM ukm_docs_categories WHERE id = '#id'", array('id' => $cat_id));
-		return $sql->run('field', 'name');
+		$sql = new Query("SELECT `name` FROM ukm_docs_categories WHERE id = '#id'", array('id' => $cat_id));
+		return $sql->getField();
 		#return 'Testnavn';
 	}
 
 	# Skal returnere et array med dokumenter.
 	public function getAllDocsFromCategory($cat_id, $sort = null) {
 		if($sort == 'newest') {
-			$sql = new SQL("SELECT * FROM ukm_docs 
+			$sql = new Query("SELECT * FROM ukm_docs 
 							WHERE category_id = '#cat_id'
 							ORDER BY `created` DESC", array('cat_id' => $cat_id));
 		}
 		elseif($sort == 'oldest') {
-			$sql = new SQL("SELECT * FROM ukm_docs 
+			$sql = new Query("SELECT * FROM ukm_docs 
 							WHERE category_id = '#cat_id'
 							ORDER BY `created` ASC", array('cat_id' => $cat_id));	
 		}
 		else {
-			$sql = new SQL("SELECT * FROM ukm_docs WHERE category_id = '#cat_id'", array('cat_id' => $cat_id));
+			$sql = new Query("SELECT * FROM ukm_docs WHERE category_id = '#cat_id'", array('cat_id' => $cat_id));
 		}
 
 		$res = $sql->run();
 		$docs = array();
-		while ($row = SQL::fetch($res)) {
+		while ($row = Query::fetch($res)) {
 			$docs[] = $this->getDocumentData( $row );
 		}
 		return $docs;
 	}
 
 	public function getAllCategories() {
-		$sql = new SQL("SELECT * FROM `ukm_docs_categories` ORDER BY `name` ASC");
+		$sql = new Query("SELECT * FROM `ukm_docs_categories` ORDER BY `name` ASC");
 		$res = $sql->run();
 		
 		$cats = array();
 
-		while($row = SQL::fetch($res)) {
+		while($row = Query::fetch($res)) {
 			$cat = new stdClass();
 			$cat->id = $row['id'];
 			$cat->name = $row['name'];
@@ -64,7 +69,7 @@ class UKMdokumenter {
 	}
 
 	public function getDocumentByPublicId( $public_id ) {
-		$sql = new SQL(
+		$sql = new Query(
 				"SELECT * ".
 				"FROM `ukm_docs` ".
 				"WHERE `public_id` = '#doc_id'",
@@ -76,7 +81,7 @@ class UKMdokumenter {
 	}
 
 	public function getDocument($doc_id) {
-		$sql = new SQL(
+		$sql = new Query(
 				"SELECT * ".
 				"FROM `ukm_docs` ".
 				"WHERE `id` = '#doc_id'",
@@ -107,9 +112,9 @@ class UKMdokumenter {
 	// name VARCHAR(255) NOT NULL
 	public function addCategory($id = null, $name) {
 		if (null != $id) 
-			$sql = new SQLins('ukm_docs_categories', array('id' => $id));
+			$sql = new Update('ukm_docs_categories', array('id' => $id));
 		else 
-			$sql = new SQLins('ukm_docs_categories');
+			$sql = new Insert('ukm_docs_categories');
 		$sql->add('name', $_POST['cat_name']);
 		$res = $sql->run();
 
@@ -139,9 +144,9 @@ class UKMdokumenter {
 	// category_id int NOT NULL
 	public function addDocument($id = null, $name, $upload_id, $category_id) {
 		if($id != null) {
-			$sql = new SQLins('ukm_docs', array('id' => $id));
+			$sql = new Update('ukm_docs', array('id' => $id));
 		} else {
-			$sql = new SQLins('ukm_docs');
+			$sql = new Insert('ukm_docs');
 			$sql->add('public_id', substr(md5(uniqid(mt_rand(), true)), 0, 8) );
 		}
 		$sql->add('name', $name);
@@ -164,14 +169,14 @@ class UKMdokumenter {
 	}
 
 	public function deleteDocument($id) {
-		$qry = new SQLdel('ukm_docs', array('id' => $id));
+		$qry = new Delete('ukm_docs', array('id' => $id));
 		#echo $qry->debug();
 		$res = $qry->run();
 		return $res;
 	}
 
 	public function deleteCategory($id) {
-		$qry = new SQLdel('ukm_docs_categories', array('id' => $id));
+		$qry = new Delete('ukm_docs_categories', array('id' => $id));
 		#echo $qry->debug();
 		$res = $qry->run();
 		return $res;
