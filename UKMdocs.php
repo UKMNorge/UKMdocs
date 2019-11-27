@@ -11,7 +11,9 @@ Author URI: http://www.github.com/AsgeirSH/
 ## Shortcode setup:
 add_shortcode('ukmdocs', 'UKMdocs_shortcode_parser');
 
-add_action('admin_menu', 'UKMdok_menu');
+if( get_option('site_type') == 'arrangor' ) {
+    add_action('admin_menu', 'UKMdok_menu');
+}
 
 function UKMdok_menu() {
 	$page = add_menu_page(
